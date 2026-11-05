@@ -9,3 +9,4 @@ __pycache__/
 # raw tracker outputs and TrackEval GT copies (regenerable; metrics are committed)
 /results/*/trackers/*/data/
 /results/*/gt/
+/results/*/videos/

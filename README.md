@@ -84,6 +84,14 @@ streamlit run app/streamlit_app.py           # http://localhost:8501
 | **Test bench** | pick tracker + ReID + sequences, move the hyper-parameter sliders, *Run & evaluate*: re-tracks from the caches and scores with TrackEval in seconds, with deltas against the benchmark defaults; download the parameters as YAML |
 | **Test videos** | the full live chain (detector -> ReID -> GMC -> tracker) on a simulated test video or an uploaded clip, with per-stage latency, and downloadable annotated MP4 + MOT-format tracks. `yolo26n` is available for a ~10x faster CPU detector |
 
+| Leaderboard | Video viewer |
+|---|---|
+| ![leaderboard](docs/screenshots/leaderboard.png) | ![viewer](docs/screenshots/viewer.png) |
+| **Live replay** | **Test bench** |
+| ![live](docs/screenshots/live.png) | ![bench](docs/screenshots/bench.png) |
+| **Test videos** | |
+| ![test videos](docs/screenshots/videos.png) | Example output: [`docs/demo_tracktrack_yolo26n_reid_MOT17-09.mp4`](docs/demo_tracktrack_yolo26n_reid_MOT17-09.mp4) |
+
 Annotated result videos for the benchmark runs can also be rendered offline:
 `python scripts/make_videos.py --tracked [--runs tracktrack__osnet_x1_0_msmt17] [--seqs MOT17-04]`.
 
