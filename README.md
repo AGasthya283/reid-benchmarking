@@ -1,7 +1,8 @@
 # reid-benchmarking
 
 Benchmark of **person re-identification (ReID) models inside multi-object trackers** on MOT17.
-It is self-contained so it can be split out into its own repository later.
+The repository root is the benchmark (expected checkout location: `~/RnD/reid-benchmarking`);
+all paths are relative to it.
 
 The grid currently benchmarked is **3 trackers x 4 ReID models (+ a no-ReID baseline)**:
 
@@ -56,6 +57,7 @@ To use full MOT17 (or MOT20 / DanceTrack): put it in MOT layout under `data/` an
 ## Quick start
 
 ```bash
+git clone <this repo> ~/RnD/reid-benchmarking && cd ~/RnD/reid-benchmarking
 pip install -r requirements.txt
 bash scripts/setup.sh                 # pinned third-party ReID code, weights, MOT17-50 (sha256-checked)
 python scripts/run_detection.py       # stage 1, cached in cache/dets/      (~30 min on 4 CPU cores)
