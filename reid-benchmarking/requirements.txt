@@ -13,3 +13,6 @@ yacs                  # fast-reid config system
 gdown                 # imported (not used) by torchreid model files
 termcolor             # fast-reid logging
 tabulate              # fast-reid
+streamlit>=1.40       # testing platform (app/streamlit_app.py)
+imageio-ffmpeg        # bundled ffmpeg for browser-playable H.264 test / result videos
+pandas

@@ -22,8 +22,9 @@ fetch() {  # url out sha256
   echo "$3  $2" | sha256sum -c --quiet - || { echo "checksum mismatch: $2"; exit 1; }
 }
 GH=https://github.com
-# detector + YOLO26n-cls (for the yolo26n-reid.onnx stand-in)
+# detectors (yolo26l: benchmark; yolo26n: fast live mode in the Streamlit app) + YOLO26n-cls (for the yolo26n-reid.onnx stand-in)
 fetch $GH/ultralytics/assets/releases/download/v8.4.0/yolo26l.pt      weights/yolo26l.pt      9fe3c544f2b19bebad7ea41e76d7ad3d88b7c2f10d11d24430c5311f6b32db26
+fetch $GH/ultralytics/assets/releases/download/v8.4.0/yolo26n.pt      weights/yolo26n.pt      9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef
 fetch $GH/ultralytics/assets/releases/download/v8.4.0/yolo26n-cls.pt  weights/yolo26n-cls.pt  0dd6f8dbc448870ac98a3cbb7156f923f7ce21fed3755d4019169ffffd279e81
 # fast-reid model zoo: SBS(R50-ibn) MSMT17
 fetch $GH/JDAI-CV/fast-reid/releases/download/v0.1.1/msmt_sbs_R50-ibn.pth weights/msmt_sbs_R50-ibn.pth 4e10cfb5dc667df0ff448838df6f9b56c9d10a95b5349bb9afebaf241a16de4a

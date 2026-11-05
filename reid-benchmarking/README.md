@@ -67,6 +67,24 @@ python scripts/sanity_reid.py         # GT-crop sanity check of every ReID model
 Every stage is cached; `run_benchmark.py --stages track eval report --trackers deepocsort --reid none`
 etc. re-runs a subset.
 
+## Testing platform (Streamlit)
+
+```bash
+python scripts/make_videos.py --raw          # simulated test videos: MOT17 sequences as H.264 camera feeds
+streamlit run app/streamlit_app.py           # http://localhost:8501
+```
+
+| Page | What it does |
+|---|---|
+| **Leaderboard** | all tracker x ReID runs (TrackEval HOTA / AssA / IDF1 / IDSW / MOTA), grouped bar chart, per-sequence heat-table, isolated speed numbers |
+| **Video viewer** | two runs side by side on a sequence: frame scrubber or rendered MP4, ID colours + trails, optional GT boxes, ID switches vs GT flagged in red |
+| **Live replay** | a sequence streamed as a simulated camera feed (real-time, 0.25-4x or max speed) and tracked online frame by frame from the benchmark caches; live counters for active tracks, identities and association latency |
+| **Test bench** | pick tracker + ReID + sequences, move the hyper-parameter sliders, *Run & evaluate*: re-tracks from the caches and scores with TrackEval in seconds, with deltas against the benchmark defaults; download the parameters as YAML |
+| **Test videos** | the full live chain (detector -> ReID -> GMC -> tracker) on a simulated test video or an uploaded clip, with per-stage latency, and downloadable annotated MP4 + MOT-format tracks. `yolo26n` is available for a ~10x faster CPU detector |
+
+Annotated result videos for the benchmark runs can also be rendered offline:
+`python scripts/make_videos.py --tracked [--runs tracktrack__osnet_x1_0_msmt17] [--seqs MOT17-04]`.
+
 ## Layout
 
 ```
@@ -82,7 +100,9 @@ reidbench/
   trackers/tracktrack/        vendored TrackTrack     (MIT)
   trackers/fasttracker/       vendored FastTracker    (MIT)
   third_party/trackeval/      vendored TrackEval      (MIT)
-scripts/                      setup, detection, pipeline, speed, sanity, yolo26n-reid export
+  online.py / viz.py          frame-by-frame tracking (live/replay) and drawing / H.264 video rendering
+app/streamlit_app.py          testing platform
+scripts/                      setup, detection, pipeline, speed, sanity, videos, yolo26n-reid export
 results/<dataset>__<detector>/  committed metrics + timings
 ```
 
