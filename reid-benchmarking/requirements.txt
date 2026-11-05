@@ -1,0 +1,15 @@
+numpy>=2.0
+scipy
+opencv-python-headless
+pyyaml
+lap
+filterpy
+onnx
+onnxruntime>=1.18
+torch>=2.2
+torchvision>=0.17
+ultralytics>=8.4      # YOLO26 detector + yolo26n-cls for the ReID stand-in
+yacs                  # fast-reid config system
+gdown                 # imported (not used) by torchreid model files
+termcolor             # fast-reid logging
+tabulate              # fast-reid

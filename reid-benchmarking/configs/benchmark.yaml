@@ -1,0 +1,95 @@
+# reid-benchmarking: MOT17 tracker x ReID grid
+threads: 4
+
+dataset:
+  name: MOT17-50
+  # MOT17 train, all 7 sequences, first 50% of each sequence's frames (2,652 frames, GT included).
+  # Mirror: github.com/mikel-brostrom/boxmot/releases/download/v10.0.83/MOT17-50.zip
+  split_dir: data/MOT17-50/train
+  sequences: null          # null = all
+  eval_classes: [pedestrian]
+
+detector:
+  name: yolo26l_1280
+  weights: weights/yolo26l.pt   # COCO-pretrained Ultralytics YOLO26-L, class 0 (person)
+  imgsz: 1280
+  conf: 0.10                # TrackTrack / ByteTrack-style low floor; each tracker applies its own thresholds
+  nms_loose: 0.95           # loose set (TrackTrack "deleted detection" recovery)
+  nms_std: 0.80             # standard set fed to every tracker
+
+# Appearance models. Every model sees the same detections; embeddings are cached per model.
+# runtime: onnx -> PyTorch model is exported to ONNX once (parity-checked vs PyTorch) and run with
+#                  onnxruntime, so all four models are timed on the same runtime.
+# runtime: torch -> run the PyTorch model directly.
+reid_models:
+  yolo26n_reid:
+    description: "yolo26n-reid.onnx (stand-in: YOLO26n-cls ImageNet embedding, see scripts/export_yolo26n_reid_onnx.py)"
+    backend: onnx
+    weights: weights/yolo26n-reid.onnx
+    input_hw: [256, 128]
+    mean: [0.0, 0.0, 0.0]   # Ultralytics classification preprocessing: RGB / 255, no mean/std
+    std: [1.0, 1.0, 1.0]
+  osnet_x1_0_msmt17:
+    description: "deep-person-reid (torchreid) OSNet x1.0, MSMT17"
+    backend: torchreid
+    runtime: onnx
+    arch: osnet_x1_0
+    weights: weights/osnet_x1_0_msmt17.pth
+    input_hw: [256, 128]
+  fastreid_sbs_r50ibn_msmt17:
+    description: "fast-reid SBS(R50-ibn), MSMT17"
+    backend: fastreid
+    runtime: onnx
+    config: configs/MSMT17/sbs_R50-ibn.yml
+    weights: weights/msmt_sbs_R50-ibn.pth
+    input_hw: [384, 128]
+  lmbn_n_duke:
+    description: "LightMBN LMBN-n, DukeMTMC-reID"
+    backend: lmbn
+    runtime: onnx
+    weights: weights/lmbn_n_duke.pt
+    input_hw: [384, 128]
+
+# Tracker hyper-parameters: each tracker's published MOT17 defaults (see README for sources).
+trackers:
+  deepocsort:
+    det_thresh: 0.6
+    max_age: 30
+    min_hits: 3
+    iou_threshold: 0.3
+    delta_t: 3
+    asso_func: iou
+    inertia: 0.2
+    w_association_emb: 0.75
+    alpha_fixed_emb: 0.95
+    aw_param: 0.5
+    cmc: true
+  tracktrack:
+    det_thr: 0.60
+    init_thr: 0.70
+    match_thr: 0.70
+    penalty_p: 0.20
+    penalty_q: 0.40
+    reduce_step: 0.05
+    tai_thr: 0.55
+    min_len: 3
+    max_time_lost_s: 2.0     # original: 2 x frameRate frames
+    cmc: true
+  fasttracker:
+    track_thresh: 0.7
+    track_buffer: 30
+    match_thresh: 0.85
+    reset_velocity_offset_occ: 5
+    reset_pos_offset_occ: 3
+    enlarge_bbox_occ: 1.1
+    dampen_motion_occ: 0.89
+    active_occ_to_lost_thresh: 10
+    init_iou_suppress: 0.7
+    # ReID fusion added by reid-benchmarking (BoT-SORT defaults)
+    proximity_thresh: 0.5
+    appearance_thresh: 0.25
+
+# Applied identically to every tracker's output (ByteTrack/TrackTrack MOT17 convention).
+output_filter:
+  min_box_area: 100
+  max_aspect_ratio: 1.6

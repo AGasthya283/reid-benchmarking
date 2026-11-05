@@ -1,0 +1,11 @@
+# large / downloaded artefacts (re-created by scripts/setup.sh and the pipeline)
+/data/
+/weights/
+/cache/
+/third_party/
+*.log
+__pycache__/
+*.pyc
+# raw tracker outputs and TrackEval GT copies (regenerable; metrics are committed)
+/results/*/trackers/*/data/
+/results/*/gt/
