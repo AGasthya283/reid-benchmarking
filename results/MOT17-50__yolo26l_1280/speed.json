@@ -1,0 +1,37 @@
+{
+ "cpu": "x86_64",
+ "threads": 4,
+ "sequence": "MOT17-04",
+ "frames": 30,
+ "reid": {
+  "yolo26n_reid": {
+   "ms_per_crop_bs1": 2.302907687521838,
+   "ms_per_crop_bs8": 1.2294989531369538,
+   "ms_per_crop_bs32": 1.0713131874808823,
+   "ms_per_frame_real": 83.87023336666364,
+   "crops_per_frame": 40.333333333333336
+  },
+  "osnet_x1_0_msmt17": {
+   "ms_per_crop_bs1": 76.75702081246527,
+   "ms_per_crop_bs8": 58.452252968720586,
+   "ms_per_crop_bs32": 62.07759979164015,
+   "ms_per_frame_real": 2323.2453511000735,
+   "crops_per_frame": 40.333333333333336
+  },
+  "fastreid_sbs_r50ibn_msmt17": {
+   "ms_per_crop_bs1": 287.38154409376193,
+   "ms_per_crop_bs8": 244.85334000002013,
+   "ms_per_crop_bs32": 243.8123048749882,
+   "ms_per_frame_real": 9636.880682633395,
+   "crops_per_frame": 40.333333333333336
+  },
+  "lmbn_n_duke": {
+   "ms_per_crop_bs1": 373.7086950781645,
+   "ms_per_crop_bs8": 308.7106961875179,
+   "ms_per_crop_bs32": 303.63467178123454,
+   "ms_per_frame_real": 12093.585932733307,
+   "crops_per_frame": 40.333333333333336
+  }
+ },
+ "detector_s_per_frame": 0.9835642684667012
+}

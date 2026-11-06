@@ -16,6 +16,25 @@ The grid currently benchmarked is **3 trackers x 4 ReID models (+ a no-ReID base
 **Results: [`results/MOT17-50__yolo26l_1280/RESULTS.md`](results/MOT17-50__yolo26l_1280/RESULTS.md)**
 (also `results.csv`, `results_per_sequence.csv`, `metrics.json`, `speed.json`).
 
+### Headline results (MOT17-50, YOLO26-L detections, CPU)
+
+HOTA per tracker x ReID model (best per tracker in bold). IDSW in brackets.
+
+| Tracker | none | `yolo26n_reid` | OSNet x1.0 | FastReID SBS-R50ibn | LMBN-n |
+|---|---:|---:|---:|---:|---:|
+| Deep OC-SORT | 43.49 (121) | 43.41 (117) | 43.45 (113) | **43.98** (111) | 43.75 (111) |
+| TrackTrack | - | 47.21 (102) | **48.00** (91) | 47.61 (88) | 47.66 (84) |
+| FastTracker | 45.29 (170) | 46.19 (143) | 46.22 (143) | 46.20 (147) | **46.26** (147) |
+| *ReID ms/crop (bs 32, 4 CPU threads)* | - | 1.1 | 62.1 | 243.8 | 303.6 |
+
+Takeaways:
+
+- **The tracker matters far more than the ReID model.** TrackTrack leads with every ReID model (+3.5-4.5 HOTA over Deep OC-SORT); the spread between ReID models within one tracker is <= 0.8 HOTA.
+- **Any ReID beats none**, mostly via fewer ID switches (FastTracker: 170 -> 143-147 IDSW, +0.9-1.0 HOTA).
+- **Dedicated person-ReID models give a small, consistent gain over the generic stand-in** in TrackTrack and Deep OC-SORT (-11 to -18 IDSW in TrackTrack), but no clear winner among OSNet / FastReID / LMBN.
+- **OSNet x1.0 is the best accuracy/cost trade-off**: best TrackTrack HOTA at 4-5x less compute than FastReID or LMBN. The ImageNet stand-in is ~60x cheaper still and recovers most of the gain.
+- Tracker defaults were tuned for MOT17-trained detectors; with this COCO detector, lowering thresholds helps a lot (e.g. FastTracker `track_thresh` 0.7 -> 0.5: +5.5 HOTA on MOT17-02/04 in the Test bench). The grid uses the published defaults unchanged.
+
 ## Protocol
 
 The point is to isolate the effect of the appearance model, so everything except the ReID model is
